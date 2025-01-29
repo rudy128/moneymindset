@@ -7,6 +7,7 @@ import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
 import {unified} from 'unified'
 import remarkGfm from 'remark-gfm'
+import Head from 'next/head'
 
 
 interface Props {
@@ -63,7 +64,7 @@ const BlogFormat: React.FC<Props> = ({slug}) => {
                     .use(remarkGfm)
                     .use(remarkRehype)
                     .use(rehypeStringify)
-                    .use(rehypeDocument, { title: '👋🌍' })
+                    .use(rehypeDocument, { title: post.data.title })
                     .use(rehypeFormat)
 
                 try {
@@ -90,13 +91,28 @@ const BlogFormat: React.FC<Props> = ({slug}) => {
     if (post?.error) {
     return notFound();
     }
+    function getFirst50Words(input: string):string{
+        const words = input.split(/\s+/);
+        if (words.length>50) {
+            return words.slice(0,50).join(' ') + '...'
+        } else {
+            return words.join(' ')
+        }
+    }
     
-
+    const desciption = getFirst50Words(post!.content)
   return (
+    <>
+    <Head>
+        <title>{post!.data?.title}</title>
+        <meta name='description' content={desciption} />
+    </Head>
     <section className='max-w-[1100px] w-full px-5 pt-10'>
         {/* <h1>{post!.data?.title}</h1> */}
-        <article dangerouslySetInnerHTML={ {__html: htmlContent}} className='prose max-w-[60em]' />
+        <article dangerouslySetInnerHTML={ {__html: htmlContent}} className='prose max-w-[60em] dark:prose-invert' />
     </section>
+
+    </>
   )
 }
 
