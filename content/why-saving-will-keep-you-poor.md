@@ -6,6 +6,9 @@ author: Rudeus
 ---
 # Why Saving Will Keep You Poor: The Hard Truth About Inflation and Financial Security
 
+![Image 1](https://www.berlinsbi.com/uploads/sites/2/2021/12/7-very-good-reasons-to-do-master-s-in-finance.jpg)
+>Source: Google
+
 For years, we’ve been told to save as much as possible. Save for a rainy day. Save for retirement. Save so that you’ll never be in a tough spot. But here’s the uncomfortable truth: **saving money alone could actually keep you poor.** In fact, relying on savings alone could lead to situations where you’re unable to take care of your loved ones when they need it most.
 
 What if I told you that inflation, the silent thief, is slowly eroding the value of your hard-earned savings? And if you don’t do something about it now, your financial security — and your ability to care for those you love — could be at serious risk.

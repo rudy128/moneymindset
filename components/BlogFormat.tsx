@@ -1,13 +1,7 @@
 import { notFound } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
-import rehypeDocument from 'rehype-document'
-import rehypeFormat from 'rehype-format'
-import rehypeStringify from 'rehype-stringify'
-import remarkParse from 'remark-parse'
-import remarkRehype from 'remark-rehype'
-import {unified} from 'unified'
-import remarkGfm from 'remark-gfm'
 import Head from 'next/head'
+import processContent from '@/hooks/markdown-reader'
 
 
 interface Props {
@@ -29,7 +23,7 @@ const BlogFormat: React.FC<Props> = ({slug}) => {
     const [post, setPost] = useState<PostData | null>(null)
     const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
-    const [htmlContent, setHtmlContent] = useState<string|TrustedHTML>("")
+    const [htmlContent, setHtmlContent] = useState<string|TrustedHTML|undefined>()
 
     useEffect(()=>{
         const fetchPost = async () => {
@@ -56,29 +50,38 @@ const BlogFormat: React.FC<Props> = ({slug}) => {
         fetchPost()
     },[slug])
 
-    useEffect(() => {
-        const processContent = async () => {
-            if (post?.content) {
-                const processor = unified()
-                    .use(remarkParse)
-                    .use(remarkGfm)
-                    .use(remarkRehype)
-                    .use(rehypeStringify)
-                    .use(rehypeDocument, { title: post.data.title })
-                    .use(rehypeFormat)
+    // useEffect(() => {
+    //     const processContent = async () => {
+    //         if (post?.content) {
+    //             const processor = unified()
+    //                 .use(remarkParse)
+    //                 .use(remarkGfm)
+    //                 .use(remarkRehype)
+    //                 .use(rehypeStringify)
+    //                 .use(rehypeDocument, { title: post.data.title })
+    //                 .use(rehypeFormat)
 
-                try {
-                    const result = await processor.process(post.content)
-                    setHtmlContent(result.toString())
-                } catch (err) {
-                    console.error("Error processing content:", err)
-                }
+    //             try {
+    //                 const result = await processor.process(post.content)
+    //                 setHtmlContent(result.toString())
+    //             } catch (err) {
+    //                 console.error("Error processing content:", err)
+    //             }
+    //         }
+    //     }
+
+    //     processContent()
+    // }, [post])
+
+    useEffect(()=>{
+        async function getBlog(){
+            if (post?.content){
+                const content = await processContent(post?.content, "New Blog");
+                setHtmlContent(content);
             }
         }
-
-        processContent()
-    }, [post])
-
+        getBlog()
+    },[post])
 
     if (loading) {
     return <div>Loading...</div>;
@@ -109,7 +112,7 @@ const BlogFormat: React.FC<Props> = ({slug}) => {
     </Head>
     <section className='max-w-[1100px] w-full px-5 pt-10'>
         {/* <h1>{post!.data?.title}</h1> */}
-        <article dangerouslySetInnerHTML={ {__html: htmlContent}} className='prose max-w-[60em] dark:prose-invert' />
+        <article dangerouslySetInnerHTML={ {__html: htmlContent!}} className='prose max-w-[60em] dark:prose-invert' />
     </section>
 
     </>
