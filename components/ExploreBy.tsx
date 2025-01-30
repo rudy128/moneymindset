@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardContent, CardFooter, CardHeader } from './ui/card'
+import { Card, CardFooter, CardHeader } from './ui/card'
 import Crypto from '@/public/cryptocurrency.png'
 import Image from 'next/image'
 import Link from 'next/link'

@@ -4,7 +4,7 @@ import matter from 'gray-matter'
 import { NextResponse } from 'next/server'
 import path from 'path'
 
-export async function GET(req: Request){
+export async function GET(){
   const fileData: Array<object> = []
   const data = await getServerSideProps()
   data.map((file) => {

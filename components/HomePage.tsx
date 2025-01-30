@@ -57,7 +57,7 @@ const HomePage = () => {
 
   return (
     <main className='w-[1100px] p-5 mx-auto'>
-      {data && <BeginnerReads data={data?.data!} />}
+      {data && <BeginnerReads data={data?.data} />}
       <ExploreBy />
     </main>
   );
