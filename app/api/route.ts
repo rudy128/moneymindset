@@ -4,7 +4,8 @@ import matter from 'gray-matter'
 import { NextResponse } from 'next/server'
 import path from 'path'
 
-export async function GET(){
+export async function GET(req: Request){
+  console.log(req)
   const fileData: Array<object> = []
   const data = await getServerSideProps()
   data.map((file) => {
@@ -16,7 +17,7 @@ export async function GET(){
   return NextResponse.json({data: fileData,status: 200})
 }
 
-export function POST(req: Request) {
+export async function POST(req: Request) {
   return req.json().then((datas) => {
     const { slug } = datas;
     if (!slug) {
