@@ -27,7 +27,7 @@ const HomePage = () => {
     // Function to fetch data
     const fetchData = async () => {
       try {
-        const res = await fetch('http://localhost:3000/api'); // API request to localhost:3000
+        const res = await fetch('/api'); // API request to localhost:3000
         if (!res.ok) {
           throw new Error('Failed to fetch data');
         }
