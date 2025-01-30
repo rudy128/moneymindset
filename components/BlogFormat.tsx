@@ -119,4 +119,5 @@ const BlogFormat: React.FC<Props> = ({slug}) => {
   )
 }
 
-export default BlogFormat
+export { BlogFormat }
+export type { PostData }
