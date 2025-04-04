@@ -5,7 +5,7 @@ import processContent from '@/hooks/markdown-reader'
 
 
 interface Props {
-    slug: string | string[]
+    category: string | string[]
 }
 
 interface PostData {
@@ -19,7 +19,7 @@ interface PostData {
     error?: string;
 }
 
-const BlogFormat: React.FC<Props> = ({slug}) => {
+const CategoryBlog: React.FC<Props> = ({category}) => {
     const [post, setPost] = useState<PostData | null>(null)
     const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
@@ -34,7 +34,7 @@ const BlogFormat: React.FC<Props> = ({slug}) => {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({slug:slug})
+                    body: JSON.stringify({category:category})
                 })
                 if (!response.ok){
                     throw new Error(`Post not found or invalid response`)
@@ -48,7 +48,7 @@ const BlogFormat: React.FC<Props> = ({slug}) => {
             }
         }
         fetchPost()
-    },[slug])
+    },[category])
 
     // useEffect(() => {
     //     const processContent = async () => {
@@ -119,5 +119,5 @@ const BlogFormat: React.FC<Props> = ({slug}) => {
   )
 }
 
-export { BlogFormat }
+export { CategoryBlog }
 export type { PostData }

@@ -7,7 +7,7 @@ import path from 'path'
 export async function GET(req: Request){
   console.log(req)
   const fileData: Array<object> = []
-  const data = await getServerSideProps()
+  const data = await getServerSideProps('content')
   data.map((file) => {
     const filePath = path.join(process.cwd(), 'content', file);
     const fileContents = readFileSync(filePath, 'utf-8');

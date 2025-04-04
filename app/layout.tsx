@@ -2,6 +2,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/ui/theme-provider";
+import BackgroundCanvas from "@/components/Background";
 
 export default function RootLayout({
   children,
@@ -23,6 +24,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Navbar />
+          <BackgroundCanvas />
           {children}
           <Footer />
         </ThemeProvider>

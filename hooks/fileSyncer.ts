@@ -1,8 +1,8 @@
 import { readdirSync } from "fs";
 import path from "path";
 
-export async function getServerSideProps() {
-    const contentDir = path.join(process.cwd(), 'content');
+export async function getServerSideProps(pwd: string) {
+    const contentDir = path.join(process.cwd(), pwd);
     const files = readdirSync(contentDir);
   
     // Filter out non-Markdown files (if necessary)

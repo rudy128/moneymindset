@@ -10,7 +10,7 @@ const BeginnerReads = (data: ApiResponse) => {
             <h1 className='text-4xl font-semibold'>Beginner Reads</h1>
             <div className='flex gap-5 justify-center'>
             {data && data.data?.map((datas,index)=>(
-                <Link key={index} href={`/blogs/${datas.slug}`} className='w-1/2 h-[40rem] hover:opacity-85'>
+                <Link key={index} href={`/category/${datas.slug}`} className='w-1/2 h-[40rem] hover:opacity-85'>
                 <Card className="w-full h-full relative overflow-hidden bg-card/5 text-background">
                     <img src={datas.images} alt="" loading='lazy' className='h-full object-cover absolute -z-20 dark:opacity-75 opacity-95' />
                     <CardHeader className='h-1/3'></CardHeader>

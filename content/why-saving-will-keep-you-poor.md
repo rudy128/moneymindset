@@ -5,6 +5,8 @@ date: 28/01/2025
 author: Rudeus
 description: The Hard Truth About Inflation and Financial Security
 images: https://www.berlinsbi.com/uploads/sites/2/2021/12/7-very-good-reasons-to-do-master-s-in-finance.jpg
+category: wealth-management
+featured: true
 ---
 # Why Saving Will Keep You Poor: The Hard Truth About Inflation and Financial Security
 
