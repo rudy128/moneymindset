@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server'
 import path from 'path'
 
 export async function GET(req: Request){
-  console.log(req)
+  // console.log(req)
   const fileData: Array<object> = []
   const data = await getServerSideProps('content')
   data.map((file) => {

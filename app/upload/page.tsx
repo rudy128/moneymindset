@@ -20,7 +20,7 @@ const Page = () => {
           body: data,
         });
 
-        console.log(res)
+        // console.log(res)
   
         if (!res.ok) throw new Error(await res.text());
   

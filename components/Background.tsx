@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 
 interface Particle {
   x: number;
@@ -15,18 +15,19 @@ interface Particle {
 const BackgroundCanvas: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const headerRef = useRef<HTMLElement | null>(null);
+  const [mouseX, setMouseX] = useState(0);
+  const [mouseY, setMouseY] = useState(0);
   let particles: Particle[] = [];
-  let mouseX = window.innerWidth / 2;
-  let mouseY = window.innerHeight / 2;
 
   useEffect(() => {
+    setMouseX(window.innerWidth / 2);
+    setMouseY(window.innerHeight / 2);
+
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext('2d');
-    const header = headerRef.current;
+    headerRef.current = document.querySelector('header');
 
-    // Check if canvas, context, and header are available before proceeding
-    if (!canvas || !ctx || !header) {
-      console.error('Canvas, context, or header is null');
+    if (!canvas || !ctx || !headerRef.current) {
       return;
     }
 
@@ -39,8 +40,8 @@ const BackgroundCanvas: React.FC = () => {
       speedY: number;
 
       constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
+        this.x = Math.random() * canvas!.width;
+        this.y = Math.random() * canvas!.height;
         this.size = Math.random() * 3 + 1;
         this.baseSize = this.size;
         this.speedX = Math.random() * 0.5 - 0.25;
@@ -51,7 +52,7 @@ const BackgroundCanvas: React.FC = () => {
         this.x += this.speedX;
         this.y += this.speedY;
 
-        const headerRect = header.getBoundingClientRect();
+        const headerRect = headerRef.current!.getBoundingClientRect();
         if (
           this.x > headerRect.left &&
           this.x < headerRect.right &&
@@ -79,44 +80,53 @@ const BackgroundCanvas: React.FC = () => {
           this.size = this.baseSize * (1 + force);
         }
 
-        if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
-          this.x = Math.random() * canvas.width;
-          this.y = Math.random() * canvas.height;
+        if (this.x < 0 || this.x > canvas!.width || this.y < 0 || this.y > canvas!.height) {
+          this.x = Math.random() * canvas!.width;
+          this.y = Math.random() * canvas!.height;
         }
       }
 
       draw() {
-        ctx.beginPath();
-        const gradient = ctx.createRadialGradient(
+        ctx!.beginPath();
+        const gradient = ctx!.createRadialGradient(
           this.x, this.y, 0,
           this.x, this.y, this.size
         );
         gradient.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
         gradient.addColorStop(1, 'rgba(255, 255, 255, 0.1)');
-        ctx.fillStyle = gradient;
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
+        ctx!.fillStyle = gradient;
+        ctx!.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx!.fill();
       }
     }
 
-    function init() {
-      if (!canvas || !ctx) return;  // Check if canvas or context is null
+    const resizeCanvas = () => {
+      if (canvas) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        createParticles();
+      }
+    };
 
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      particles = Array.from({ length: 400 }, () => new ParticleClass());
-    }
+    const createParticles = () => {
+      if (!canvas) return;
+      particles = [];
+      const numberOfParticles = (canvas.height * canvas.width) / 9000;
+      for (let i = 0; i < numberOfParticles; i++) {
+        particles.push(new ParticleClass());
+      }
+    };
 
-    function animate() {
-      if (!canvas || !ctx) return;  // Check if canvas or context is null
+    const animate = () => {
+      if (!canvas || !ctx) return;
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const parallaxX = (mouseX / canvas.width - 0.5) * 20;
       const parallaxY = (mouseY / canvas.height - 0.5) * 20;
 
-      if (header) {
-        header.style.transform = `translate(-50%, 0) translate(${parallaxX}px, ${parallaxY}px)`;
+      if (headerRef.current) {
+        headerRef.current.style.transform = `translate(-50%, 0) translate(${parallaxX}px, ${parallaxY}px)`;
       }
 
       particles.forEach(particle => {
@@ -125,28 +135,27 @@ const BackgroundCanvas: React.FC = () => {
       });
 
       requestAnimationFrame(animate);
-    }
+    };
 
-    window.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-    });
+    const handleMouseMove = (event: MouseEvent) => {
+      setMouseX(event.clientX);
+      setMouseY(event.clientY);
+    };
 
-    window.addEventListener('resize', init);
-    init();
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('resize', resizeCanvas);
+
+    resizeCanvas();
+    createParticles();
     animate();
 
     return () => {
-      window.removeEventListener('mousemove', () => {});
-      window.removeEventListener('resize', init);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('resize', resizeCanvas);
     };
   }, []);
 
-  return (
-    <div>
-      <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full z-0" />
-    </div>
-  );
+  return <canvas ref={canvasRef} className="fixed top-0 left-0 -z-10"></canvas>;
 };
 
 export default BackgroundCanvas;
